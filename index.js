@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 
 // middleware
@@ -27,8 +27,15 @@ const client = new MongoClient(uri, {
 
 async function run() {
 	try {
-		// Connect the client to the server	(optional starting in v4.7)
-		// await client.connect();
+		const collagesCollection = client.db("acamediaDb").collection("collages");
+
+		// Get all Collages
+		app.get("/collages", async (req, res) => {
+			const result = await collagesCollection.find().toArray();
+			res.send(result);
+		});
+
+
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
 		console.log("Pinged your deployment. You successfully connected to MongoDB!");
