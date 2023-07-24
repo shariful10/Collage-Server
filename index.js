@@ -28,6 +28,7 @@ const client = new MongoClient(uri, {
 async function run() {
 	try {
 		const collagesCollection = client.db("acamediaDb").collection("collages");
+		const selectedCollection = client.db("acamediaDb").collection("selected");
 
 		// Get all Collages
 		app.get("/collages", async (req, res) => {
@@ -41,6 +42,14 @@ async function run() {
 			const result = await collagesCollection.findOne({ _id: new ObjectId(id) });
 			res.send(result);
 		});
+
+		// Select Data Save to Database
+		app.post("/selected", async (req, res) => {
+			const myColleges = req.body;
+			const result = await selectedCollection.insertOne(myColleges);
+			res.send(result);
+		});
+
 
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
