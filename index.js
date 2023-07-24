@@ -29,6 +29,7 @@ async function run() {
 	try {
 		const collagesCollection = client.db("acamediaDb").collection("collages");
 		const selectedCollection = client.db("acamediaDb").collection("selected");
+		const feedbackCollection = client.db("acamediaDb").collection("feedback");
 
 		// Get all Collages
 		app.get("/collages", async (req, res) => {
@@ -54,6 +55,13 @@ async function run() {
 		app.get("/selected/:email", async (req, res) => {
 			const email = req.params.email;
 			const result = await selectedCollection.find({ email: email }).toArray();
+			res.send(result);
+		});
+
+		// Feedback Data Save to Database
+		app.post("/feedback", async (req, res) => {
+			const reviewData = req.body;
+			const result = await feedbackCollection.insertOne(reviewData);
 			res.send(result);
 		});
 
