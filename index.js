@@ -50,6 +50,13 @@ async function run() {
 			res.send(result);
 		});
 
+		// Get a selected Collage Data
+		app.get("/selected/:email", async (req, res) => {
+			const email = req.params.email;
+			const result = await selectedCollection.find({ email: email }).toArray();
+			res.send(result);
+		});
+
 
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
